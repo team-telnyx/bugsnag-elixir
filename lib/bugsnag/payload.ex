@@ -33,7 +33,7 @@ defmodule Bugsnag.Payload do
       |> add_user(Keyword.get(options, :user))
       |> add_device(Keyword.get(options, :os_version), fetch_option(options, :hostname, "unknown"))
       |> add_metadata(Keyword.get(options, :metadata))
-      |> add_release_stage(fetch_option(options, :release_stage, "production"))
+      |> add_app_info(options)
       |> add_notify_release_stages(fetch_option(options, :notify_release_stages, ["production"]))
 
     Map.put payload, :events, [event]
@@ -52,7 +52,16 @@ defmodule Bugsnag.Payload do
   defp add_severity(event, severity) when severity in ~w(error warning info), do: Map.put(event, :severity, severity)
   defp add_severity(event, _), do: Map.put(event, :severity, "error")
 
+  defp add_app_info(event, options) do
+    release_stage = fetch_option(options, :release_stage, "production")
+    app_version = fetch_option(options, :app_version, nil)
+    app = %{app: %{releaseStage: release_stage,
+                   version: app_version}}
+
+    Map.merge(event, app)
+  end
   defp add_release_stage(event, release_stage), do: Map.put(event, :app, %{releaseStage: release_stage})
+
   defp add_notify_release_stages(event, notify_release_stages), do: Map.put(event, :notifyReleaseStages, notify_release_stages)
 
   defp add_context(event, nil), do: event

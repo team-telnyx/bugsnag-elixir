@@ -98,6 +98,7 @@ defmodule Bugsnag do
   defp default_config do
     [
       api_key:       {:system, "BUGSNAG_API_KEY", nil},
+      app_version:   {:system, "BUGSNAG_APP_VERSION", nil},
       endpoint_url:  {:system, "BUGSNAG_ENDPOINT_URL", @notify_url},
       use_logger:    {:system, "BUGSNAG_USE_LOGGER", true},
       release_stage: {:system, "BUGSNAG_RELEASE_STAGE", "production"},

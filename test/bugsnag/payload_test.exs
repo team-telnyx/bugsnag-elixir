@@ -93,6 +93,15 @@ defmodule Bugsnag.PayloadTest do
     assert ""           == get_event(release_stage: "").app.releaseStage
   end
 
+  test "it reports app version" do
+    refute get_event().app.version
+    Application.put_env(:bugsnag, :app_version, "from-env")
+    assert "from-env" == get_event().app.version
+    Application.delete_env(:bugsnag, :app_version)
+
+    assert "latest" == get_event(app_version: "latest").app.version
+  end
+
   test "it reports the notify release stages" do
     assert ["production"] == get_event().notifyReleaseStages
     assert ["staging"]    == get_event(notify_release_stages: ["staging"]).notifyReleaseStages
