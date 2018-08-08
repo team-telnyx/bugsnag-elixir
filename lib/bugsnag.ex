@@ -29,7 +29,7 @@ defmodule Bugsnag do
     end
 
     children = [
-      supervisor(Task.Supervisor, [[name: Bugsnag.TaskSupervisor, restart: :transient]])
+      supervisor(Task.Supervisor, [[name: Bugsnag.TaskSupervisor, restart: :temporary]])
     ]
 
     opts = [strategy: :one_for_one, name: Bugsnag.Supervisor]
