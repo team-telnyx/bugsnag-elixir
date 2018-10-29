@@ -93,14 +93,14 @@ defmodule Bugsnag do
   end
 
   defp should_notify_exception(exception) do
-    ignored = Application.get_env(:bugsnag, :ignored_exceptions)
+    ignored_exceptions = Application.get_env(:bugsnag, :ignored_exceptions)
 
     exception =
       with %module{} <- exception do
         module
       end
 
-    should_notify() && exception not in ignored
+    should_notify() && exception not in ignored_exceptions
   end
 
   def should_notify do
